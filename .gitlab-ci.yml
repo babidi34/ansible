@@ -9,12 +9,13 @@ build_image:
   only:
     refs:
       - master
+      - tags
     changes:
       - Dockerfile
       - requirements.txt
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - TAG="$CI_COMMIT_TAG"
+    - TAG="${CI_COMMIT_TAG:-latest}"
     - docker build -t $CI_REGISTRY_IMAGE:latest -t $CI_REGISTRY_IMAGE:$TAG .
     - docker push $CI_REGISTRY_IMAGE:latest
     - docker push $CI_REGISTRY_IMAGE:$TAG
